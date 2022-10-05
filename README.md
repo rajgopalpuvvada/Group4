@@ -25,30 +25,3 @@ This is one of the various software, which is helpful to rectify complications, 
 
 
 
-TOOLS AND TECHNOLOGY:
-
-Technology/Domain: Java
-Front-End: JSP, Html, CSS, JS, Bootstrap.
-Server-side: Servlet.
-Back-end: MYSQL.
-Server: Tomcat 8.5
-
-Modules and Functionalities of Helpdesk Ticket System
-There are two main roles that is Admin & User. Let us see the functionality of each
-
-1.	 Admin
-
-Admin can ADD/VIEW/UPDATE/DELETE ticket category(type).
-Admin can ADD/VIEW/UPDATE/DELETE ticket status.
-It can ADD/VIEW/UPDATE/DELETE a new ticket.
-Admin can VIEW/UPDATE/DELETE tickets raised by users.
-Admin can ADD comments on a particular ticket raised.
-It can close the ticket also.
-It can VIEW all the users in the system. 
-
-2.	 User
-
-Users can raise helpdesk tickets.
-Users can VIEW/UPDATE/DELETE tickets raised.
-It can ADD the comment also.
-![image](https://user-images.githubusercontent.com/40684777/193680984-e12cd002-40af-4efd-a672-a166875546a8.png)
