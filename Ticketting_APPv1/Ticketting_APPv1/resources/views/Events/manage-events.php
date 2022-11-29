@@ -1,16 +1,15 @@
-<div class="manage-all-clients fluid close-route">
+<div class="manage-all-events fluid close-route">
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4 container">
-        <h1 class="h3 mb-0 text-gray-800">Manage Clients</h1> 
+        <h1 class="h3 mb-0 text-gray-800">Manage Events</h1> 
     </div>
 
     <hr></hr>
     
     <!-- Content Row --> 
-    <div class="manage-clients-content">
-        
+    <div class="manage-events-content"> 
         <div class="table-default-filters">
-            <form class="manage-clients-filters-form">
+            <form class="manage-events-filters-form">
                 <div class="row">
                     <div class="col">
                         <div class="form-group">
@@ -41,7 +40,7 @@
                     <div class="col-lg-3">
                         <div class="form-group">
                             <label for="" class="pt-3">Date of attending</label>
-                            <input type="date" id="date-of-attending" class="form-control date-of-attending" aria-label="Date of attending">
+                            <input type="date" id="date-of-attending" class="form-control date-of-attending" value="<?= date('Y-m-d') ?>" aria-label="Date of attending">
                         </div>
                     </div>
                 </div>
@@ -52,20 +51,38 @@
         </div>
         <div class="table-container">
             <div class="table-responsive">
-                <table class="table manage-clients-table">
+                <table class="table manage-events-table">
                     <thead>
                         <tr>
-                            <th>column</th>
-                            <th>column</th>
-                            <th>column</th>
-                            <th>column</th>
-                            <th>column</th>
-                            <th>column</th>
+                            <th>Event Name</th>
+                            <th>Event Type</th>
+                            <th>Categpry</th>
+                            <th>No of Participants</th>
+                            <th>Date of Events</th>
+                            <th>End of Event Date</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Primary Contact Number</th>
+                            <th>Secondary Contact Number</th>
+                            <th>Personal Contact Number</th>
+                            <th>Org. Name</th>
+                            <th>Theme of Event</th>
+                            <th>Org. Contact Email</th>
+                            <th>About Event</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody> 
                         <tr> 
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                             <td></td>
                             <td></td>
                             <td></td>

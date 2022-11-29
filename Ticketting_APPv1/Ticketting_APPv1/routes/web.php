@@ -26,6 +26,11 @@
     Route::post('/users/create', 'AuthController@signup_user');
     Route::post('/auth/authentication-settings', 'AuthController@settings');
 
-    Route::post('/clients/create', 'DashboardController@create_clients'); 
+    Route::post('/clients/create', 'DashboardController@create_clients');
+
+    // Get resources
+    Route::post('/users/get-users', 'AuthController@fetch_users'); 
+    Route::post('/events/get-events', 'DashboardController@fetch_events');
+    Route::post('/clients/get-clients', 'ClientsController@fetch_clients');
     
     Route::get('/logout', 'AuthController@logout'); 

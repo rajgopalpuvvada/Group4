@@ -25,10 +25,10 @@ class Request {
     }
 
     public function set_http_requests() {
-        if (isset($_POST)) { 
+        if (isset($_REQUEST)) { 
             $app_configurations = $this->appConfig();
 
-            $http_request = $this->append_array_values([$app_configurations, $_POST]);
+            $http_request = $this->append_array_values([$app_configurations, $_REQUEST]);
 
             return $http_request;
         } 

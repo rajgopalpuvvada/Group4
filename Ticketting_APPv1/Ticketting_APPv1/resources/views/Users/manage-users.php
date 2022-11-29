@@ -25,6 +25,12 @@
                     </div>
                     <div class="col">
                         <div class="form-group">
+                            <label for="" class="pt-3">Job Reg Number</label>
+                            <input type="text" id="jobRegNo" class="form-control jobRegNo" placeholder="Enter job registration number" aria-label="Job registration number">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
                             <label for="" class="pt-3">Contact Phone</label>
                             <input type="text" id="contact-phone" class="form-control contact-phone" placeholder="Enter contact phone" aria-label="Contact phone">
                         </div>
@@ -43,15 +49,14 @@
         </div>
         <div class="table-container">
             <div class="table-responsive">
-                <table class="table manage-users-table">
+                <table class="table manage-users-table table-striped table-sm table-hover table-bordered">
                     <thead>
                         <tr>
-                            <th>column</th>
-                            <th>column</th>
-                            <th>column</th>
-                            <th>column</th>
-                            <th>column</th>
-                            <th>column</th>
+                            <th>Job Reg No.</th>
+                            <th>Username</th>
+                            <th>Email Address</th>
+                            <th>Authentication Mode</th>
+                            <th>Created at</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -62,13 +67,12 @@
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td></td>
-                            <td></td>
+                            <td></td> 
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-    </div> 
+    </div>  
     <!-- Content Row --> 
 </div>

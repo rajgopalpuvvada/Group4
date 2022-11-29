@@ -192,4 +192,86 @@ class AuthController extends SP
             }
         }
     }
+
+    public function fetch_users(Request $request)
+    {
+        try {
+            $post =  json_decode($request->get->data, true);
+
+            $jobRegNo = $post['jobRegNo'];
+            $username = $post['username'];
+            $email = $post['email']; 
+            $contact_phone = $post['contact_phone'];
+            $user_creation_date = $post['user_creation_date'];
+
+            $userCreationDate = isset($user_creation_date) 
+            ? new DateTime('' . str_replace("/", "-", isset($user_creation_date) 
+            ? $user_creation_date
+            : '') . '') 
+            : NULL; 
+
+            $user_creation_date = $userCreationDate->format('Y-m-d');
+            
+            $serve = new Serve(AuthModel::$table);
+
+            $filters = array();
+
+            if (!empty($jobRegNo)) {
+                if (count($filters) == 0) {
+                    array_push($filters, 'jobRegNo =' . $jobRegNo);
+                }
+                else {
+                    array_push($filters, "or jobRegNo =" . $jobRegNo);
+                }
+            }
+
+            if (!empty($username)) {
+                if (count($filters) == 0) {
+                    array_push($filters, 'username =' . $username);
+                }
+                else {
+                    array_push($filters, "or username =" . $username);
+                }
+            }
+
+            if (!empty($email)) {
+                if (count($filters) == 0) {
+                    array_push($filters, 'email =' . $email);
+                }
+                else {
+                    array_push($filters, "or email =" . $email);
+                }
+            }
+
+            if (!empty($contact_phone)) {
+                if (count($filters) == 0) {
+                    array_push($filters, 'contact =' . $contact_phone);
+                }
+                else {
+                    array_push($filters, "or contact =" . $contact_phone);
+                }
+            }
+
+            $response = $serve->query_by_condition($filters); 
+
+            $users = array();
+
+            foreach ($response as $UKey => $User) {
+                $created_at = new DateTime($User['created_at']);
+                $created_at = $created_at->format('Y-m-d');
+                
+                $user_creation_date = (isset($user_creation_date)) 
+                    ?   $user_creation_date 
+                    :   date("Y-m-d");
+
+                if ($created_at >= $user_creation_date) {
+                    array_push($users, $User);
+                }
+            }
+
+            $this->serve_json(['success' => true, 'data' => $users]);
+        } catch (\Throwable $th) {
+            $this->serve_json(['error' => true, 'message' => "Oops, An Unexpected error!"]); 
+        }
+    }
 }

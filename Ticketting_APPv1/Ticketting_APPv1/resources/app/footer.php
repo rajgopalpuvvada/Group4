@@ -8,6 +8,9 @@
 <!-- include jquery -->
 <script type="text/javascript" src="<?= asset_path("assets/jquery/jquery.min.js") ?>"></script>
 
+<!-- popper js -->
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+
 <!-- include bootstrap js -->
 <script type="text/javascript" src="<?= asset_path("bootstrap/js/bootstrap.min.js") ?>"></script>
 

@@ -237,7 +237,13 @@ class Serve
                 } 
             } 
 
-            $query = "SELECT * FROM $this->table WHERE " . $appendable_query_string; 
+            if (empty($appendable_query_string)) {
+                $query = "SELECT * FROM $this->table"; 
+            }
+            else {
+                $query = "SELECT * FROM $this->table WHERE " . $appendable_query_string; 
+            }
+
             $result = mysqli_query($this->db_connection, $query);
             
             $row_array = array();

@@ -7,6 +7,7 @@ use SelfPhp\Serve;
 use App\http\middleware\AuthMiddleware;
 use App\models\DashboardModel; 
 use App\models\ClientModel;
+use App\models\EventModel;
 use App\services\MailerService; 
 use App\http\utils\EventUtil;
 use App\http\utils\ClientUtil;
@@ -96,6 +97,97 @@ class DashboardController extends SP
         }
         else {
             $this->serve_json(['error' => true, 'response' => $data, 'message' => "Client already exists!"]);
+        }
+    }
+
+    public function fetch_events(Request $request)
+    {
+        try {
+            $post =  json_decode($request->get->data, true);
+
+            $eventName = $post['eventName'];
+            $eventType = $post['eventType'];
+            $eventVenue = $post['eventVenue']; 
+            $event_creation_date = $post['event_creation_date'];
+            $date_of_attending = $post['date_of_attending'];
+
+
+            $EventCreationDate = isset($event_creation_date) 
+            ? new DateTime('' . str_replace("/", "-", isset($event_creation_date) 
+            ? $event_creation_date
+            : '') . '') 
+            : NULL; 
+
+            $event_creation_date = $EventCreationDate->format('Y-m-d');
+
+            $dateOfAttending = isset($date_of_attending) 
+            ? new DateTime('' . str_replace("/", "-", isset($date_of_attending) 
+            ? $date_of_attending
+            : '') . '') 
+            : NULL; 
+
+            $date_of_attending = $dateOfAttending->format('Y-m-d');
+            
+            $serve = new Serve(EventModel::$table);
+
+            $filters = array();
+
+            // if (!empty($eventName)) {
+            //     if (count($filters) == 0) {
+            //         array_push($filters, 'eventName =' . $eventName);
+            //     }
+            //     else {
+            //         array_push($filters, "or eventName =" . $eventName);
+            //     }
+            // }
+
+            // if (!empty($eventType)) {
+            //     if (count($filters) == 0) {
+            //         array_push($filters, 'eventType =' . $eventType);
+            //     }
+            //     else {
+            //         array_push($filters, "or eventType =" . $eventType);
+            //     }
+            // }
+
+            // // if (!empty($eventVenue)) {
+            // //     if (count($filters) == 0) {
+            // //         array_push($filters, 'email =' . $eventVenue);
+            // //     }
+            // //     else {
+            // //         array_push($filters, "or email =" . $eventVenue);
+            // //     }
+            // // }
+
+            // if (!empty($event_creation_date)) {
+            //     if (count($filters) == 0) {
+            //         array_push($filters, 'created_at =' . $event_creation_date);
+            //     }
+            //     else {
+            //         array_push($filters, "or created_at =" . $event_creation_date);
+            //     }
+            // }
+
+            $response = $serve->query_by_condition($filters); 
+
+            $events_array = array();
+
+            foreach ($response as $UKey => $Events) {
+                $dateofevent = new DateTime($Events['dateOfEvent']);
+                $dateofevent = $dateofevent->format('Y-m-d');
+                
+                $date_of_attending = (isset($date_of_attending)) 
+                    ?   $date_of_attending 
+                    :   date("Y-m-d");
+
+                if ($dateofevent >= $date_of_attending) {
+                    array_push($events_array, $Events);
+                }
+            }
+
+            $this->serve_json(['success' => true, 'data' => $events_array]);
+        } catch (\Throwable $th) {
+            $this->serve_json(['error' => true, 'message' => "Oops, An Unexpected error!"]); 
         }
     }
 }

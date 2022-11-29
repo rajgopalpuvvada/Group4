@@ -52,7 +52,17 @@ class App {
         
                     if (document.body.contains(route_path_element)) {
                         if (route_path_element.classList.contains("close-route")) { 
-                            route_path_element.classList.remove("close-route"); 
+                            route_path_element.classList.remove("close-route");
+                            
+                            if (sessionStorage.getItem('route') == 'manage-all-users') {
+                                this.manage_users();
+                            }
+                            else if (sessionStorage.getItem('route') == 'manage-all-events') {
+                                this.manage_events();
+                            }
+                            else if (sessionStorage.getItem('route') == 'manage-all-clients') {
+                                this.manage_clients();
+                            }
                         }  
                     } 
                 }
@@ -62,7 +72,7 @@ class App {
         if (sessionStorage.getItem('route')) {
             const sessioned_route_path = document.getElementById(`${sessionStorage.getItem('route')}`); 
             if (document.body.contains(sessioned_route_path)) {
-                sessioned_route_path.click();
+                sessioned_route_path.click(); 
             } 
         }
 
@@ -325,6 +335,223 @@ class App {
         } 
 
         createauthubmitBtn.innerHTML = "Create Job Reg Number";
+    } 
+
+    manage_users() {
+        const manage_users_filter_form = document.querySelector('.manage-users-filters-form');
+        
+        const input_fields = manage_users_filter_form.querySelectorAll('.form-control');
+ 
+        input_fields.forEach(input_field => {
+            input_field.addEventListener('change', () => {
+                // console.log(`input with id, ${input.id}, changed its value`);
+                this.manage_users();
+            });
+        });
+
+        this.method = "POST";
+        this.action = "/users/get-users";
+        
+        const data = {
+            jobRegNo: manage_users_filter_form.querySelector('.jobRegNo').value,
+            username: manage_users_filter_form.querySelector('.username').value,
+            email: manage_users_filter_form.querySelector('.email').value, 
+            contact_phone: manage_users_filter_form.querySelector('.contact-phone').value,
+            user_creation_date: manage_users_filter_form.querySelector('.user-creation-date').value, 
+        } 
+        
+        this.urlParams = `data=${JSON.stringify(data)}`;
+
+        const response = this.server_request(this.method, this.action, this.urlParams);
+        this.handle_server_response_promise(response);
+    }
+
+    handle_fetch_users_request_response(response) { 
+        if (response) {
+            var response = JSON.parse(response);
+            console.log(response) 
+
+            const manage_users_content_area = document.querySelector('.manage-users-content'); 
+
+            var manage_users_table = $('.manage-users-table').DataTable({
+                data: response.data,
+                columns: [
+                    { data: 'jobRegNo', title: 'Job Reg No.' },
+                    { data: 'username', title: 'Username' },
+                    { data: 'email', title: 'Email Address' },
+                    { data: 'whoami', title: 'Authentication Mode' },
+                    { data: 'created_at', title: 'Created at' },
+                    { 
+                        data: null, 
+                        title: 'Action', 
+                        render: function(data, type, full) {
+                            // console.log(data)
+                            return `<div class="btn-group">
+                                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Action
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <button type="button" class="btn btn-secondary btn-sm dropdown-item delete-user-${data.id}" id="delete-user-${data.id}">Delete</button>
+                                            <button type="button" class="btn btn-secondary btn-sm dropdown-item update-user-${data.id}" id="update-user-${data.id}">Update</button>
+                                            <button type="button" class="btn btn-secondary btn-sm dropdown-item block-user-${data.id}" id="block-user-${data.id}">Block</button>
+                                        </div>
+                                    </div>`
+                        } 
+                    }, 
+                ],
+                order: [[1, 'desc']],
+                destroy: true,
+            });
+        }  
+    }
+
+    //function to write actual data of a table row
+    rowDataGet (id) {
+        console.log(id);
+    }
+
+    manage_events() {
+        const manage_events_filter_form = document.querySelector('.manage-events-filters-form');
+        
+        const input_fields = manage_events_filter_form.querySelectorAll('.form-control');
+ 
+        input_fields.forEach(input_field => {
+            input_field.addEventListener('change', () => { 
+                this.manage_events();
+            });
+        });
+
+        this.method = "POST";
+        this.action = "/events/get-events";
+        
+        const data = { 
+            eventName: manage_events_filter_form.querySelector('.eventName').value,
+            eventType: manage_events_filter_form.querySelector('.eventType').value,
+            eventVenue: manage_events_filter_form.querySelector('.eventVenue').value, 
+            event_creation_date: manage_events_filter_form.querySelector('.event-creation-date').value,
+            date_of_attending: manage_events_filter_form.querySelector('.date-of-attending').value, 
+        } 
+        
+        this.urlParams = `data=${JSON.stringify(data)}`;
+
+        const response = this.server_request(this.method, this.action, this.urlParams);
+        this.handle_server_response_promise(response);
+    }
+
+    handle_fetch_events_request_response(response) { 
+        if (response) {
+            var response = JSON.parse(response);
+            console.log(response) 
+
+            const manage_events_content_area = document.querySelector('.manage-events-content'); 
+
+            $('.manage-events-table').DataTable({
+                data: response.data,
+                columns: [
+                    { data: 'eventName', title: 'Event Name' },
+                    { data: 'eventType', title: 'Event Type' },
+                    { data: 'eventCategory', title: 'Categpry' },
+                    { data: 'noOfParticipants', title: 'No of Participants' },
+                    { data: 'dateOfEvent', title: 'Date of Events' },
+                    { data: 'endOfEventDate', title: 'End of Event Date' },
+                    { data: 'firstName', title: 'First Name' },
+                    { data: 'lastName', title: 'Last Name' },
+                    { data: 'primaryContactNumber', title: 'Primary Contact Number' },
+                    { data: 'secondaryContactNumber', title: 'Secondary Contact Number' },
+                    { data: 'personalContactEmail', title: 'Personal Contact Number' },
+                    { data: 'organizationName', title: 'Org. Name' },
+                    { data: 'organizationContactEmail', title: 'Org. Contact Email' },
+                    { data: 'themeOfEvent', title: 'Theme of Event.' },
+                    { data: 'additionalEventCaption', title: 'About Event' },
+                    { 
+                        data: null, 
+                        title: 'Action', 
+                        "defaultContent": 
+                        ` 
+                        <div class="btn-group">
+                            <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Action
+                            </button>
+                            <div class="dropdown-menu">
+                                <button type="button" class="btn btn-secondary btn-sm dropdown-item delete-event">Delete</button>
+                                <button type="button" class="btn btn-secondary btn-sm dropdown-item update-event">Update</button>
+                                <button type="button" class="btn btn-secondary btn-sm dropdown-item block-event">Block</button>
+                            </div>
+                        </div>`
+                    }, 
+                ],
+                order: [[5, 'asc']],
+                destroy: true,
+            });
+        }  
+    }
+
+    manage_clients() {
+        const manage_clients_filter_form = document.querySelector('.manage-clients-filters-form');
+        
+        const input_fields = manage_clients_filter_form.querySelectorAll('.form-control');
+ 
+        input_fields.forEach(input_field => {
+            input_field.addEventListener('change', () => { 
+                this.manage_events();
+            });
+        });
+
+        this.method = "POST";
+        this.action = "/clients/get-clients";
+        
+        const data = { 
+            first_name: manage_clients_filter_form.querySelector('.first_name').value,
+            last_name: manage_clients_filter_form.querySelector('.last_name').value,
+            contact_email: manage_clients_filter_form.querySelector('.contact_email').value, 
+            organization: manage_clients_filter_form.querySelector('.organization').value,
+            org_contact_email: manage_clients_filter_form.querySelector('.org_contact_email').value,
+            date_created_at: manage_clients_filter_form.querySelector('.date_created_at').value
+        } 
+        
+        this.urlParams = `data=${JSON.stringify(data)}`;
+
+        const response = this.server_request(this.method, this.action, this.urlParams);
+        this.handle_server_response_promise(response);
+    }
+
+    handle_fetch_clients_request_response(response) { 
+        if (response) {
+            var response = JSON.parse(response);
+            console.log(response) 
+
+            const manage_clients_content_area = document.querySelector('.manage-clients-content'); 
+
+            $('.manage-clients-table').DataTable({
+                data: response.data,
+                columns: [
+                    { data: 'first_name', title: 'First Name' },
+                    { data: 'last_name', title: 'Last Name' },
+                    { data: 'contact_phone', title: 'Contact Phone' },
+                    { data: 'contact_email', title: 'Personal Email Address' },
+                    { data: 'organization_name', title: 'Organization Name' },
+                    { data: 'organization_email_address', title: 'Organization Contact Email' }, 
+                    { 
+                        data: null, 
+                        title: 'Action', 
+                        "defaultContent": 
+                        ` 
+                        <div class="btn-group">
+                            <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Action
+                            </button>
+                            <div class="dropdown-menu">
+                                <button type="button" class="btn btn-secondary btn-sm dropdown-item create-ticket">Create Ticket</button>
+                                <button type="button" class="btn btn-secondary btn-sm dropdown-item delete-client">Delete</button>
+                                <button type="button" class="btn btn-secondary btn-sm dropdown-item update-client">Update</button> 
+                            </div>
+                        </div>`
+                    }, 
+                ],
+                order: [[5, 'asc']],
+                destroy: true,
+            });
+        }  
     }
 
     /**
@@ -387,6 +614,15 @@ class App {
         }
         else if (this.responseURL.includes("/auth/authentication-settings")) {
             this.handle_set_authentication_settings_request_response(this.responseText);
+        }
+        else if (this.responseURL.includes("/users/get-users")) {
+            this.handle_fetch_users_request_response(this.responseText);
+        }
+        else if (this.responseURL.includes("/events/get-events")) {
+            this.handle_fetch_events_request_response(this.responseText);
+        }
+        else if (this.responseURL.includes("/clients/get-clients")) {
+            this.handle_fetch_clients_request_response(this.responseText);
         }
         else {
             console.log(`Dummy Response on ${this.responseURL}: ${this.responseText}`);
